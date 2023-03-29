@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function ListOfDentists({ doctors, setDoctors }) {
   const navigate = useNavigate();
   const [state, setState] = useState([]);
-  
+
   useEffect(() => {
     setState(doctors);
   }, [doctors]);
@@ -32,25 +32,22 @@ export default function ListOfDentists({ doctors, setDoctors }) {
           margin: "50px",
         }}
       >
-        {" "}
         {state.length > 0 ? (
           state.map((users, index) => {
             return (
               <Item
                 variant="outlined"
-                sx={{ width: "22%", height: "fit-content", textAlign: "left" }}
+                sx={{ width: "23%",  textAlign: "left" }}
                 key={index}
               >
                 <img
                   style={{ width: "100%", height: "250px" }}
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk6DSg8WvTLfZSMf5eyj9oY1wgaSTF2DIWvQhwSQpJomxIypNzlrcLm9TwYb3kNXyBIRM&usqp=CAU"
                   alt=""
-                />{" "}
+                />
                 <Box sx={{ margin: "5px" }}>
-                  {" "}
                   <p>
-                    {" "}
-                    Name:{" "}
+                    Name:
                     <strong>
                       {users.firstName} {users.lastName}
                     </strong>

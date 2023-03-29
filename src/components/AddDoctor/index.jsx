@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Stack,  Box } from "@mui/material";
+import { Button, Stack, InputLabel } from "@mui/material";
 import { ErrorMessage, Form, Field, Formik, useFormik } from "formik";
 import * as yup from "yup";
+import { TextField } from "@material-ui/core";
 
 const validationSchema = yup.object({
-  firstName: yup.string("Enter your first name"),
-  lastName: yup
-    .string("Enter your last name")
-
-    .required("Last name is required"),
+  firstName: yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  lastName: yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  email: yup.string().email("Invalid email").required("Required"),
   specialty: yup
     .string("Enter your last name")
 
@@ -18,10 +23,6 @@ const validationSchema = yup.object({
     .string("Enter your phone number")
     .min(9, "Phone number should be of minimum 9 numbers length")
     .required("Phone number is required"),
-  email: yup
-    .string("Enter your email")
-    .email("Invalid email format")
-    .required("Email is required"),
 });
 const initialValues = {
   firstName: "",
@@ -42,7 +43,7 @@ getDatafromLS();
 
 function AddDoctor() {
   const onSubmit = (values) => {
-   formik.setFieldValue(values);
+    formik.setFieldValue(values);
   };
   const formik = useFormik({
     initialValues,
@@ -59,7 +60,9 @@ function AddDoctor() {
   //   };
 
   // };
+const setField=()=>{
 
+}
   // main array of objects state || books state || books array of objects
   const [doctors, setDoctors] = useState(getDatafromLS());
 
@@ -72,6 +75,7 @@ function AddDoctor() {
 
   // form submit event
   const handleAddDoctorSubmit = (e) => {
+  formik.setFieldValue("firstName", firstName);
     e.preventDefault();
     // creating an object
     let doctor = {
@@ -93,97 +97,83 @@ function AddDoctor() {
   }, [doctors]);
   return (
     <Stack
-      spacing={2}
+      spacing={1}
       sx={{ mt: "100px", width: "100%", alignItems: "center" }}
     >
-      <Formik initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}>
-      <Form onSubmit={handleAddDoctorSubmit}>
-       <Box sx={{display:'flex', direction:'column'}}>
-       <Field
-          sx={{ mt: "5px" }}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        <Form onSubmit={handleAddDoctorSubmit}>
+        <Field sx={{mt:"5px"}}
           fullWidth
-          required
           variant="outlined"
           id="firstName"
           name="firstName"
-          type="text"
           label="First name"
-          value={firstName}
+          value={formik.values.firstName}
+          onChange={formik.handleChange}
+          error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+          helperText={formik.touched.firstName && formik.errors.firstName}
           
-          onChange={(e) => setFirstName(e.target.value)}
-      />
-      <ErrorMessage name="firstName"/>
-       </Box>
-       <Box sx={{display:'flex', direction:'column'}}>
-       <Field
-          sx={{ mt: "5px" }}
-          fullWidth
-          variant="outlined"
-          id="lastname"
-          type="text"
-          name="lastName"
-          label="Last name"
-          onChange={(e) => setLastName(e.target.value)}
-          value={lastName}
-          error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-          helpertext={formik.touched.lastName && formik.errors.lastName}
         />
-       </Box>
-        <Box sx={{display:'flex', direction:'column'}}>
-        <Field
-          sx={{ mt: "5px" }}
-          type="text"
-          fullWidth
-          variant="outlined"
-          id="specialty"
-          name="specialty"
-          label="Specialty"
-          onChange={(e) => setSpecialty(e.target.value)}
-          value={specialty}
-          error={formik.touched.specialty && Boolean(formik.errors.specialty)}
-          helpertext={formik.touched.specialty && formik.errors.specialty}
-        />
-        </Box>
-      <Box sx={{display:'flex', direction:'column'}}>
-      <Field
-          sx={{ mt: "5px" }}
-          fullWidth
-          variant="outlined"
-          id="number"
-          type="number"
-          name="number"
-          label="Phone number"
-          onChange={(e) => setNumber(e.target.value)}
-          value={number}
-          error={formik.touched.number && Boolean(formik.errors.number)}
-          helpertext={formik.touched.number && formik.errors.number}
-        />
-      </Box>
-        <Box sx={{display:'flex', direction:'column'}} >
-          <label htmlFor="email">Email</label>
+
+          <InputLabel htmlFor="name">Last name</InputLabel>
           <Field
-            sx={{ mt: "5px" }}
-            fullWidth
-            variant="outlined"
+            sx={{ mt: "5px", border: "1px solid lightgrey" }}
+            fullWidth={true}
+            type="text"
+            name="lastName"
+            onChange={(e) => setLastName(e.target.value)}
+            value={lastName}
+            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+            helpertext={formik.touched.lastName && formik.errors.lastName}
+          />
+
+          <InputLabel htmlFor="text">Specialty</InputLabel>
+          <Field
+            sx={{ mt: "5px", border: "1px solid lightgrey" }}
+            type="text"
+            fullWidth={true}
+            name="specialty"
+            onChange={(e) => setSpecialty(e.target.value)}
+            value={specialty}
+            error={formik.touched.specialty && Boolean(formik.errors.specialty)}
+            helpertext={formik.touched.specialty && formik.errors.specialty}
+          />
+
+          <InputLabel htmlFor="number">Phone number</InputLabel>
+          <Field
+            sx={{ mt: "5px", border: "1px solid lightgrey" }}
+            fullWidth={true}
+            type="number"
+            name="number"
+            onChange={(e) => setNumber(e.target.value)}
+            value={number}
+            error={formik.touched.number && Boolean(formik.errors.number)}
+            helpertext={formik.touched.number && formik.errors.number}
+          />
+
+          <InputLabel htmlFor="email">Email</InputLabel>
+          <Field
+            sx={{ mt: "5px", border: "1px solid lightgrey" }}
+            fullWidth={true}
             type="email"
-            id="email"
             name="email"
-            label=""
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
+            value={formik.values.email}
+            onChange={formik.handleChange}
             error={formik.touched.email && Boolean(formik.errors.email)}
             helpertext={formik.touched.email && formik.errors.email}
           />
           {formik.touched.email && formik.errors.email ? (
             <p className="m-0 text-red ">{formik.errors.email}</p>
           ) : null}
-        </Box>
-        <Button fullWidth width="%" type="submit">
-          Submit
-        </Button>
-      </Form>
+
+          <Button fullWidth width="%" type="submit"  onClick={setField}>
+            Submit
+          </Button>
+        </Form>
       </Formik>
     </Stack>
   );
